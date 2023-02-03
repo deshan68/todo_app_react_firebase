@@ -57,6 +57,10 @@ li:hover {
   font-weight: 500;
   color: aliceblue;
   text-decoration: none;
+  margin-top: 15px;
+}
+.addTodobutton:hover {
+  background-color: #27788e;
 }
 .ItemLst {
   display: flex;

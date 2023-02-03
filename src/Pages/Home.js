@@ -22,7 +22,7 @@ export default function Home() {
         }}
       >
         <NavLink to={"/addtodo"} className="addTodobutton">
-          <div className="addTodobutton">ADD NEW TODO </div>
+          <div>ADD NEW TODO </div>
         </NavLink>
       </section>
       <section className="ItemLst">
