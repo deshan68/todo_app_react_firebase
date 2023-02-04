@@ -2,24 +2,55 @@ import { getAuth, signInWithRedirect, signOut } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { auth, googleProvider } from "../firbase/config";
+import { auth, db, googleProvider } from "../firbase/config";
 import Cookies from "universal-cookie";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
 
-export default function Home({ disName, setIsAuth, authName }) {
+export default function Home({ authId, setIsAuth, authName }) {
   const navigate = useNavigate();
   const cookies = new Cookies();
+  const [todiLists, setTodoLists] = useState([]);
+
+  // const todoCollection = doc(db, "todos", auth.currentUser.uid);
+  // const todoCollection = collection(db, "todos");
+  const q = query(collection(db, "todos"), where("userId", "==", authId));
 
   const logOutHandler = async () => {
     try {
       await signOut(auth);
       cookies.remove("auth-token");
       cookies.remove("auth-name");
+      cookies.remove("auth-id");
       setIsAuth(false);
       navigate("/");
     } catch (err) {
       console.error(err);
     }
   };
+
+  const getTodoList = async () => {
+    try {
+      const data = await getDocs(q);
+      const filterData = data.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+      setTodoLists(filterData);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    getTodoList();
+  }, []);
   return (
     <div className="homeScreenContainer">
       <nav>
@@ -45,33 +76,20 @@ export default function Home({ disName, setIsAuth, authName }) {
         </NavLink>
       </section>
       <section className="ItemLst">
-        <div className="todoItem">
-          <div className="todoInfo">
-            <h2>Titile :{" This is a titile"}</h2>
-            <h4>
-              Description :
-              {" Lorem Ipsum is simply dummy text of the printing a... "}
-            </h4>
-            <h4>Date :{" 2023 02 03"}</h4>
+        {todiLists.map((item) => (
+          <div className="todoItem" key={item.description}>
+            <div className="todoInfo">
+              <h2>Titile : {item.title}</h2>
+              <h4>Description : {item.description}</h4>
+              <h4>Date : {item.title}</h4>
+            </div>
+            <div className="todoButtonsdiv">
+              <div className="todoButtons delete">Delete</div>
+              <div className="todoButtons edit">Edit</div>
+              <div className="todoButtons markAsDone">Mark As Done</div>
+            </div>
           </div>
-          <div className="todoButtonsdiv">
-            <div className="todoButtons delete">Delete</div>
-            <div className="todoButtons edit">Edit</div>
-            <div className="todoButtons markAsDone">Mark As Done</div>
-          </div>
-        </div>
-        <div className="todoItem">
-          <div className="todoInfo">
-            <h2>Titile :</h2>
-            <h4>Description :</h4>
-            <h4>Date :</h4>
-          </div>
-          <div className="todoButtonsdiv">
-            <div className="todoButtons delete">Delete</div>
-            <div className="todoButtons edit">Edit</div>
-            <div className="todoButtons markAsDone">Mark As Done</div>
-          </div>
-        </div>
+        ))}
       </section>
     </div>
   );

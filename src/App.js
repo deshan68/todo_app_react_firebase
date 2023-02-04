@@ -9,6 +9,7 @@ function App() {
   const cookies = new Cookies();
   const [isAuth, setIsAuth] = useState(cookies.get("auth-token"));
   const [authName, setSetAuthName] = useState(cookies.get("auth-name"));
+  const [authId, setSetAuthId] = useState(cookies.get("auth-id"));
 
   return (
     <div className="App">
@@ -21,13 +22,20 @@ function App() {
               setIsAuth={setIsAuth}
               setSetAuthName={setSetAuthName}
               authName={authName}
+              authId={authId}
+              setSetAuthId={setSetAuthId}
             />
           }
         />
         <Route
           path="/home"
           element={
-            <Home isAuth={isAuth} setIsAuth={setIsAuth} authName={authName} />
+            <Home
+              authId={authId}
+              isAuth={isAuth}
+              setIsAuth={setIsAuth}
+              authName={authName}
+            />
           }
         />
         <Route path="/addtodo" element={<AddTodo />} />

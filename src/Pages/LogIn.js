@@ -8,7 +8,14 @@ import Home from "./Home";
 
 const cookies = new Cookies();
 
-export default function LogIn({ isAuth, setIsAuth, setSetAuthName, authName }) {
+export default function LogIn({
+  setSetAuthId,
+  isAuth,
+  setIsAuth,
+  setSetAuthName,
+  authName,
+  authId,
+}) {
   const navigate = useNavigate();
 
   const signUpWithGoogle = async () => {
@@ -17,15 +24,17 @@ export default function LogIn({ isAuth, setIsAuth, setSetAuthName, authName }) {
       console.log("Logged");
       cookies.set("auth-token", result.user.refreshToken);
       cookies.set("auth-name", auth?.currentUser?.displayName);
+      cookies.set("auth-id", auth?.currentUser?.uid);
       setIsAuth(true);
       setSetAuthName(auth?.currentUser?.displayName);
+      setSetAuthId(auth?.currentUser?.uid);
       navigate("/home");
     } catch (err) {
       console.log(err);
     }
   };
 
-  if (!isAuth) {
+  if (!isAuth || !authName) {
     return (
       <div
         style={{
@@ -45,5 +54,12 @@ export default function LogIn({ isAuth, setIsAuth, setSetAuthName, authName }) {
       </div>
     );
   }
-  return <Home authName={authName} isAuth={isAuth} setIsAuth={setIsAuth} />;
+  return (
+    <Home
+      authId={authId}
+      authName={authName}
+      isAuth={isAuth}
+      setIsAuth={setIsAuth}
+    />
+  );
 }
