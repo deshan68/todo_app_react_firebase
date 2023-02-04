@@ -15,7 +15,6 @@ export default function AddTodo() {
     if (!todoTitle || !todoDescription) return;
     try {
       await addDoc(todoCollection, {
-        id: addDoc.id,
         title: todoTitle,
         description: todoDescription,
         date: new Date(),
