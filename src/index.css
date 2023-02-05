@@ -172,3 +172,58 @@ input {
   width: 10px;
   border-radius: 20px;
 }
+
+@media only screen and (max-width: 600px) {
+  nav {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  ul {
+    font-size: medium;
+  }
+  .addTodobutton {
+    font-size: medium;
+    font-weight: 300;
+    margin-top: 5px;
+  }
+  .todoItem {
+    width: 350px;
+    height: 150px;
+    margin: 10px;
+  }
+  .todoButtons {
+    height: 25px;
+    font-weight: 400;
+    font-size: small;
+    width: 31%;
+    text-decoration: none;
+    color: aliceblue;
+  }
+  .addtodoContainer {
+    width: 350px;
+    height: 250px;
+  }
+  input {
+    width: 350px;
+    height: 40px;
+    font-size: 10px;
+  }
+  .saveButton {
+    height: 25px;
+    font-weight: 400;
+    font-size: small;
+    width: 28%;
+    text-decoration: none;
+    color: aliceblue;
+    text-decoration: none;
+    color: aliceblue;
+  }
+  .checkCircle {
+    height: 7px;
+    width: 7px;
+  }
+  .fillcheckCircle {
+    height: 7px;
+    width: 7px;
+  }
+}

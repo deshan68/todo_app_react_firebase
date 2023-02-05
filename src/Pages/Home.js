@@ -22,6 +22,8 @@ export default function Home({ authId, setIsAuth, authName }) {
   const cookies = new Cookies();
   const [todiLists, setTodoLists] = useState([]);
   const [isIndicating, setIsIndicating] = useState(false);
+  const [isDeleteBtnIndicating, setIsDeleteBtnIndicating] = useState(false);
+  const [clickedButoonId, setClickedButoonId] = useState("");
 
   // const todoCollection = doc(db, "todos", auth.currentUser.uid);
   // const todoCollection = collection(db, "todos");
@@ -58,16 +60,23 @@ export default function Home({ authId, setIsAuth, authName }) {
   }, []);
 
   const deletTodo = async (id) => {
+    setClickedButoonId(id);
+    setIsDeleteBtnIndicating(true);
     const todoDoc = doc(db, "todos", id);
     await deleteDoc(todoDoc);
     getTodoList();
+    setIsDeleteBtnIndicating(false);
   };
 
   const updateComplete = async (id, complete) => {
+    setClickedButoonId(id);
     setIsIndicating(true);
     const todoDoc = doc(db, "todos", id);
     await updateDoc(todoDoc, { complete: !complete });
     getTodoList();
+    setTimeout(() => {
+      setIsIndicating(false);
+    }, 1000);
   };
 
   return (
@@ -100,7 +109,7 @@ export default function Home({ authId, setIsAuth, authName }) {
             <div className="todoInfo">
               <h2>Titile : {item.title}</h2>
               <h4>Description : {item.description}</h4>
-              <h4>Date : {item.title}</h4>
+              <h4>Date : {item.data}</h4>
             </div>
             <div className="todoButtonsdiv">
               <div
@@ -108,6 +117,9 @@ export default function Home({ authId, setIsAuth, authName }) {
                 onClick={() => deletTodo(item.id)}
               >
                 Delete
+                {isDeleteBtnIndicating && clickedButoonId === item.id ? (
+                  <Spinner size={10} />
+                ) : null}
               </div>
               <div className="todoButtons edit">Edit</div>
               <div
@@ -115,11 +127,15 @@ export default function Home({ authId, setIsAuth, authName }) {
                 onClick={() => updateComplete(item.id, item.complete)}
               >
                 Mark As Done
-                <div
-                  className={
-                    item.complete === true ? "fillcheckCircle" : "checkCircle"
-                  }
-                ></div>
+                {isIndicating && clickedButoonId === item.id ? (
+                  <Spinner size={10} />
+                ) : (
+                  <div
+                    className={
+                      item.complete === true ? "fillcheckCircle" : "checkCircle"
+                    }
+                  ></div>
+                )}
               </div>
             </div>
           </div>

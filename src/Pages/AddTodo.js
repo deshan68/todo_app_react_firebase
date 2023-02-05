@@ -17,7 +17,7 @@ export default function AddTodo() {
       await addDoc(todoCollection, {
         title: todoTitle,
         description: todoDescription,
-        date: new Date(),
+        date: new Date().getDate,
         userId: auth.currentUser.uid,
         complete: false,
       });
@@ -50,10 +50,13 @@ export default function AddTodo() {
           placeholder="Enter Description"
           onChange={(e) => setTodoDescription(e.target.value)}
         />
-        <NavLink role={"button"} to={""} className="saveButton">
-          <div className="saveButton" onClick={addNewTodo}>
-            Save{" "}
-          </div>
+        <NavLink
+          onClick={addNewTodo}
+          role={"button"}
+          to={""}
+          className="saveButton"
+        >
+          <div className="saveButton">Save </div>
         </NavLink>
       </div>
     </div>
