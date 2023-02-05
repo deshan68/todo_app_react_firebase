@@ -1,7 +1,7 @@
 import AddTodo from "./Pages/AddTodo";
 import Home from "./Pages/Home";
 import LogIn from "./Pages/LogIn";
-import { Route, Routes, Link } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Cookies from "universal-cookie";
 import { useState } from "react";
 import UpdateTodo from "./Pages/UpdateTodo";

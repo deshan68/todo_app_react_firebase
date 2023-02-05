@@ -1,18 +1,14 @@
-import { async } from "@firebase/util";
-import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 import React, { useState } from "react";
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
-import { auth, db } from "../firbase/config";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { db } from "../firbase/config";
 
 export default function UpdateTodo({}) {
   const [todoTitle, setTodoTitle] = useState("");
   const [todoDescription, setTodoDescription] = useState("");
 
-  const location = useLocation();
-  console.log(location);
-
-  const todoCollection = collection(db, "todos");
   const naviagte = useNavigate();
+  const location = useLocation();
 
   const updatetitle = async () => {
     const movieDoc = doc(db, "todos", location.state);

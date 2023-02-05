@@ -19,6 +19,11 @@ code {
   background-color: #191528;
   height: 100vh;
 }
+.homeBodyContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 nav {
   padding-top: 20px;
   padding-bottom: 20px;

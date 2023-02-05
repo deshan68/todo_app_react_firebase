@@ -1,7 +1,6 @@
-import { async } from "@firebase/util";
 import { addDoc, collection, doc } from "firebase/firestore";
 import React, { useState } from "react";
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { auth, db } from "../firbase/config";
 
 export default function AddTodo({}) {

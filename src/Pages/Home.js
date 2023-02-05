@@ -1,8 +1,8 @@
-import { getAuth, signInWithRedirect, signOut } from "firebase/auth";
+import { signOut } from "firebase/auth";
 import React, { useEffect, useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { auth, db, googleProvider } from "../firbase/config";
+import { auth, db } from "../firbase/config";
 import Cookies from "universal-cookie";
 import {
   collection,
@@ -14,21 +14,15 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
-import { Spinner } from "react-activity";
+import { Spinner, Bounce, Digital, Windmill } from "react-activity";
 import "react-activity/dist/library.css";
 
-export default function Home({
-  authId,
-  setIsAuth,
-  authName,
-  todoTitle,
-  setTodoTitle,
-  todoDescription,
-  setTodoDescription,
-}) {
+export default function Home({ authId, setIsAuth, authName }) {
   const navigate = useNavigate();
   const cookies = new Cookies();
   const [todiLists, setTodoLists] = useState([]);
+  const [isLoading, setIsloading] = useState(true);
+  const [isEmptyList, setIsemptyList] = useState(false);
   const [isIndicating, setIsIndicating] = useState(false);
   const [isDeleteBtnIndicating, setIsDeleteBtnIndicating] = useState(false);
   const [clickedButoonId, setClickedButoonId] = useState("");
@@ -58,6 +52,14 @@ export default function Home({
         id: doc.id,
       }));
       setTodoLists(filterData);
+      if (todiLists.length == 0) {
+        // setIsemptyList(true);
+        console.log(isEmptyList);
+      } else {
+        setIsemptyList(false);
+        console.log(isEmptyList);
+      }
+      setIsloading(false);
     } catch (err) {
       console.log(err);
     }
@@ -89,9 +91,6 @@ export default function Home({
 
   const updaHandler = async (id) => {
     navigate("/update", { state: id });
-    // const todoDoc = doc(db, "moveis", id);
-    // await updateDoc(todoDoc, { title: todoTitle });
-    // getTodoList();
   };
 
   return (
@@ -108,59 +107,82 @@ export default function Home({
           </NavLink>
         </ul>
       </nav>
-      <section
-        style={{
-          display: "flex",
-          justifyContent: "center",
-        }}
-      >
-        <NavLink to={"/addtodo"} className="addTodobutton">
-          <div>ADD NEW TODO</div>
-        </NavLink>
-      </section>
-      <section className="ItemLst">
-        {todiLists.map((item) => (
-          <div className="todoItem" key={item.id}>
-            <div className="todoInfo">
-              <h2>Titile : {item.title}</h2>
-              <h4>Description : {item.description}</h4>
-              <h4>Date : {item.data}</h4>
-            </div>
-            <div className="todoButtonsdiv">
-              <div
-                className="todoButtons delete"
-                onClick={() => deletTodo(item.id)}
-              >
-                Delete
-                {isDeleteBtnIndicating && clickedButoonId === item.id ? (
-                  <Spinner size={10} />
-                ) : null}
-              </div>
-              <div
-                className="todoButtons edit"
-                onClick={() => updaHandler(item.id)}
-              >
-                Edit
-              </div>
-              <div
-                className="todoButtons markAsDone"
-                onClick={() => updateComplete(item.id, item.complete)}
-              >
-                Mark As Done
-                {isIndicating && clickedButoonId === item.id ? (
-                  <Spinner size={10} />
-                ) : (
-                  <div
-                    className={
-                      item.complete === true ? "fillcheckCircle" : "checkCircle"
-                    }
-                  ></div>
-                )}
-              </div>
-            </div>
-          </div>
-        ))}
-      </section>
+      <div className="homeBodyContainer">
+        {isLoading ? (
+          <Digital style={{ paddingTop: "20px" }} color="white" size={30} />
+        ) : (
+          <>
+            <section
+              style={{
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <NavLink to={"/addtodo"} className="addTodobutton">
+                <div>ADD NEW TODO</div>
+              </NavLink>
+            </section>
+            <>
+              {isEmptyList ? (
+                <span style={{ color: "white", paddingTop: "20px" }}>
+                  Empty List
+                </span>
+              ) : (
+                <>
+                  <section className="ItemLst">
+                    {todiLists.map((item) => (
+                      <div className="todoItem" key={item.id}>
+                        <div className="todoInfo">
+                          <h2>Titile : {item.title}</h2>
+                          <h4>Description : {item.description}</h4>
+                          <h4>Date : {item.data}</h4>
+                        </div>
+                        <div className="todoButtonsdiv">
+                          <div
+                            className="todoButtons delete"
+                            onClick={() => deletTodo(item.id)}
+                          >
+                            Delete
+                            {isDeleteBtnIndicating &&
+                            clickedButoonId === item.id ? (
+                              <Spinner size={10} />
+                            ) : null}
+                          </div>
+                          <div
+                            className="todoButtons edit"
+                            onClick={() => updaHandler(item.id)}
+                          >
+                            Edit
+                          </div>
+                          <div
+                            className="todoButtons markAsDone"
+                            onClick={() =>
+                              updateComplete(item.id, item.complete)
+                            }
+                          >
+                            Mark As Done
+                            {isIndicating && clickedButoonId === item.id ? (
+                              <Spinner size={10} />
+                            ) : (
+                              <div
+                                className={
+                                  item.complete === true
+                                    ? "fillcheckCircle"
+                                    : "checkCircle"
+                                }
+                              ></div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </section>
+                </>
+              )}
+            </>
+          </>
+        )}
+      </div>
     </div>
   );
 }
