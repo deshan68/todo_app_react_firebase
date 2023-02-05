@@ -1,30 +1,26 @@
 import { async } from "@firebase/util";
-import { addDoc, collection, doc } from "firebase/firestore";
+import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
 import React, { useState } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { auth, db } from "../firbase/config";
 
-export default function AddTodo({}) {
+export default function UpdateTodo({}) {
   const [todoTitle, setTodoTitle] = useState("");
   const [todoDescription, setTodoDescription] = useState("");
+
+  const location = useLocation();
+  console.log(location);
 
   const todoCollection = collection(db, "todos");
   const naviagte = useNavigate();
 
-  const addNewTodo = async () => {
-    if (!todoTitle || !todoDescription) return;
-    try {
-      await addDoc(todoCollection, {
-        title: todoTitle,
-        description: todoDescription,
-        date: new Date(),
-        userId: auth.currentUser.uid,
-        complete: false,
-      });
-      naviagte("/home");
-    } catch (err) {
-      console.log(err);
-    }
+  const updatetitle = async () => {
+    const movieDoc = doc(db, "todos", location.state);
+    await updateDoc(movieDoc, {
+      title: todoTitle,
+      description: todoDescription,
+    });
+    naviagte("/home");
   };
 
   return (
@@ -37,7 +33,7 @@ export default function AddTodo({}) {
       }}
     >
       <div className="addtodoContainer">
-        <h1>Add A Todo</h1>
+        <h1>Update Todo</h1>
         <input
           required
           type="text"
@@ -51,12 +47,12 @@ export default function AddTodo({}) {
           onChange={(e) => setTodoDescription(e.target.value)}
         />
         <NavLink
-          onClick={addNewTodo}
+          onClick={updatetitle}
           role={"button"}
           to={""}
           className="saveButton"
         >
-          <div className="saveButton">Save </div>
+          <div className="saveButton">Update </div>
         </NavLink>
       </div>
     </div>

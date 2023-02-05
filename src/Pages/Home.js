@@ -17,7 +17,15 @@ import {
 import { Spinner } from "react-activity";
 import "react-activity/dist/library.css";
 
-export default function Home({ authId, setIsAuth, authName }) {
+export default function Home({
+  authId,
+  setIsAuth,
+  authName,
+  todoTitle,
+  setTodoTitle,
+  todoDescription,
+  setTodoDescription,
+}) {
   const navigate = useNavigate();
   const cookies = new Cookies();
   const [todiLists, setTodoLists] = useState([]);
@@ -79,6 +87,13 @@ export default function Home({ authId, setIsAuth, authName }) {
     }, 1000);
   };
 
+  const updaHandler = async (id) => {
+    navigate("/update", { state: id });
+    // const todoDoc = doc(db, "moveis", id);
+    // await updateDoc(todoDoc, { title: todoTitle });
+    // getTodoList();
+  };
+
   return (
     <div className="homeScreenContainer">
       <nav>
@@ -121,7 +136,12 @@ export default function Home({ authId, setIsAuth, authName }) {
                   <Spinner size={10} />
                 ) : null}
               </div>
-              <div className="todoButtons edit">Edit</div>
+              <div
+                className="todoButtons edit"
+                onClick={() => updaHandler(item.id)}
+              >
+                Edit
+              </div>
               <div
                 className="todoButtons markAsDone"
                 onClick={() => updateComplete(item.id, item.complete)}
