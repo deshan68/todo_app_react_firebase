@@ -17,7 +17,7 @@ export default function AddTodo() {
       await addDoc(todoCollection, {
         title: todoTitle,
         description: todoDescription,
-        date: new Date().getDate,
+        date: new Date(),
         userId: auth.currentUser.uid,
         complete: false,
       });
