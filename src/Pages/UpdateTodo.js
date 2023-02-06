@@ -11,8 +11,8 @@ export default function UpdateTodo({}) {
   const location = useLocation();
 
   const updatetitle = async () => {
-    const movieDoc = doc(db, "todos", location.state);
-    await updateDoc(movieDoc, {
+    const todoDoc = doc(db, "todos", location.state);
+    await updateDoc(todoDoc, {
       title: todoTitle,
       description: todoDescription,
     });

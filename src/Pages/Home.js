@@ -52,12 +52,12 @@ export default function Home({ authId, setIsAuth, authName }) {
         id: doc.id,
       }));
       setTodoLists(filterData);
-      if (todiLists.length == 0) {
-        // setIsemptyList(true);
-        console.log(isEmptyList);
+      if (filterData.length == 0) {
+        setIsemptyList(true);
+        // console.log(isEmptyList);
       } else {
         setIsemptyList(false);
-        console.log(isEmptyList);
+        // console.log(isEmptyList);
       }
       setIsloading(false);
     } catch (err) {
