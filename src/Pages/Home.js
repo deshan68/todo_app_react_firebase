@@ -54,10 +54,8 @@ export default function Home({ authId, setIsAuth, authName }) {
       setTodoLists(filterData);
       if (filterData.length == 0) {
         setIsemptyList(true);
-        // console.log(isEmptyList);
       } else {
         setIsemptyList(false);
-        // console.log(isEmptyList);
       }
       setIsloading(false);
     } catch (err) {
@@ -145,7 +143,10 @@ export default function Home({ authId, setIsAuth, authName }) {
                             Delete
                             {isDeleteBtnIndicating &&
                             clickedButoonId === item.id ? (
-                              <Spinner size={10} />
+                              <Spinner
+                                style={{ marginLeft: "10px" }}
+                                size={10}
+                              />
                             ) : null}
                           </div>
                           <div
